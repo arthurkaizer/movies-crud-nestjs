@@ -7,17 +7,7 @@ import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'db',
-      port: 5432,
-      username: 'postgres',
-      password: 'postgres',
-      database: 'postgres',
-      entities: [],
-      synchronize: true,
-      autoLoadEntities: true,
-    }),
+    TypeOrmModule,
     PassportModule.register({ defaultStrategy: 'jwt' }),
     AuthModule,
   ],
