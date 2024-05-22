@@ -3,7 +3,7 @@ import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 @Entity()
 export class Movie {
   @PrimaryGeneratedColumn()
-  id: number;
+  uuid: number;
 
   @Column()
   title: string;
@@ -14,12 +14,6 @@ export class Movie {
   @Column()
   director: string;
 
-  @Column('simple-array')
-  cast: string[];
-
-  @Column('simple-array')
-  genre: string[];
-
   @Column()
   releaseYear: number;
 
@@ -28,34 +22,4 @@ export class Movie {
 
   @Column()
   ageRating: string;
-
-  @Column('float')
-  rating: number;
-
-  @Column()
-  language: string;
-
-  @Column()
-  countryOfOrigin: string;
-
-  @Column('date')
-  addedDate: Date;
-
-  @Column()
-  posterUrl: string;
-
-  @Column()
-  trailerUrl: string;
-
-  @Column()
-  format: string;
-
-  @Column()
-  producer: string;
-
-  @Column('bigint')
-  budget: number;
-
-  @Column('bigint')
-  boxOffice: number;
 }

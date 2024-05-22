@@ -1,32 +1,37 @@
-import {
-  Injectable,
-  InternalServerErrorException,
-  Logger,
-} from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 import { Movie } from './entity/movie.entity';
-
-export interface CreateUser {
-  username: string;
-  password: string;
-}
+import { CreateMovieDTO, UpdateMovieDTO } from './dto';
 
 @Injectable()
 export class MovieService {
-  private userRepository;
+  private movieRepository;
+  //TODO: usar o logger
   private logger = new Logger();
   constructor(private dataSource: DataSource) {
-    this.userRepository = this.dataSource.getRepository(Movie);
+    this.movieRepository = this.dataSource.getRepository(Movie);
   }
-  async create(createMovieDTO: createMovieDTO): Promise<Movie> {
-    try {
-      const user = await this.userRepository.create(createMovieDTO);
-      return await this.userRepository.save(user);
-    } catch (err) {
-      this.logger.error(err.message, err.stack);
-      throw new InternalServerErrorException(
-        'Something went wrong, Try again!',
-      );
-    }
+  async create(createMovieDTO: CreateMovieDTO): Promise<Movie> {
+    const movie = await this.movieRepository.create(createMovieDTO);
+    return await this.movieRepository.save(movie);
+  }
+
+  async update(id: number, updateMovieDTO: UpdateMovieDTO): Promise<Movie> {
+    const existingMovie = await this.findOne(id);
+    const movie = this.movieRepository.merge(existingMovie, updateMovieDTO);
+    return await this.movieRepository.save(movie);
+  }
+
+  async findOne(id: number): Promise<Movie> {
+    return await this.movieRepository.findOne(id);
+  }
+
+  async findAll(): Promise<Movie[]> {
+    return await this.movieRepository.find();
+  }
+
+  async remove(id: number): Promise<Movie> {
+    const existingMovie = await this.findOne(id);
+    return await this.movieRepository.remove(existingMovie);
   }
 }
